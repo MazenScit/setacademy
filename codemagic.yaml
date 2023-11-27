@@ -3,6 +3,9 @@ workflows:
         environment:
             flutter: stable
 
+  environment:
+    groups:
+      - firebase_credentials
 workflows:
   ios-workflow:
     name: iOS Workflow 
