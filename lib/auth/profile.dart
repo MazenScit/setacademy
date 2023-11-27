@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -32,7 +30,7 @@ class _ProfileState extends State<Profile> {
   TextEditingController emailController = TextEditingController();
   TextEditingController addressController = TextEditingController();
 
-  FirebaseAuth auth = FirebaseAuth.instance;
+  // FirebaseAuth auth = FirebaseAuth.instance;
   String year = '1';
   var group;
   XFile? pickedFile;

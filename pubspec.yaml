@@ -38,10 +38,10 @@ dependencies:
   get: ^4.6.6
   shared_preferences: ^2.2.2
   http: ^1.1.0
-  firebase_core: ^2.15.1
-  cloud_firestore: ^4.9.1
-  firebase_messaging: ^14.6.7
-  firebase_auth: ^4.14.1
+  # firebase_core: ^2.15.1
+  # cloud_firestore: ^4.9.1
+  # firebase_messaging: ^14.6.7
+  # firebase_auth: ^4.14.1
   colorful_safe_area: ^1.0.0
   dio: ^5.3.4
   permission_handler: ^11.0.1

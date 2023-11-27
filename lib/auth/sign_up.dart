@@ -1,8 +1,5 @@
 import 'dart:io';
-
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:setappstore/Utils/general_URL.dart';
 import 'package:url_launcher/url_launcher.dart' as launcher;
 import 'package:flutter/material.dart';
@@ -33,7 +30,7 @@ class _sgin_upState extends State<sgin_up> {
   TextEditingController emailController = TextEditingController();
   TextEditingController addressController = TextEditingController();
 
-  FirebaseAuth auth = FirebaseAuth.instance;
+  // FirebaseAuth auth = FirebaseAuth.instance;
   String year = '1';
   var group;
   bool istrue = false;
