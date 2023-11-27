@@ -3,10 +3,15 @@ import 'dart:math';
 import 'package:get/get.dart';
 import 'package:setappstore/screen/sendmessagesystem/controller/syriatelcontroller.dart';
 import 'package:url_launcher/url_launcher.dart';
+SyriatelController _syriatelController=SyriatelController();
+late String syriatelurl;
+geturl(phonenumber,code) async {
+  await _syriatelController.geturl(phonenumber, code.toString()).then((value) {
+     syriatelurl=value!;
+  });
+}
+sendmessage(String phonenumber) async {
 
-sendmessage(String phonenumber,String mypass) async {
-
-  print(mypass);
   Random rnd;
   int min = 100000;
   int max = 999999;
@@ -14,14 +19,15 @@ sendmessage(String phonenumber,String mypass) async {
   String completephonenumber = "963" + phonenumber.substring(1, 10);
   print(completephonenumber);
   int code = min + rnd.nextInt(max - min);
-
+  geturl(phonenumber,code.toString()).whenComplete((){
+      _launchURL(syriatelurl);
+    
+  });
   print("code");
-  print(code);
-  print("https://bms.syriatel.sy/API/SendSMS.aspx?user_name=S.E.Tcenter1&password=$mypass&msg=رمز التفعيل الخاص بك هو $code&sender=S.E.Tcenter&to=$completephonenumber");
-  // String encrypted=encription(code.toString());
-  _launchURL(
-      "https://bms.syriatel.sy/API/SendSMS.aspx?user_name=S.E.Tcenter1&password=$mypass&msg=رمز التفعيل الخاص بك هو $code&sender=S.E.Tcenter&to=$completephonenumber");
+  print(syriatelurl);
   return code.toString();
+  // String encrypted=encription(code.toString());
+
 }
 
 _launchURL(String _url) async {

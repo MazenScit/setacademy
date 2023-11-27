@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:setappstore/Utils/Color.dart';
 import 'package:setappstore/Utils/appVersion.dart';
+import 'package:setappstore/Utils/general_URL.dart';
 import 'package:setappstore/auth/log_in.dart';
+import 'package:setappstore/controls/apiacceptence.dart';
 import 'package:setappstore/controls/appversion.dart';
 import 'package:setappstore/screen/EndVersion.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,8 +18,9 @@ class WalkThroughScreen extends StatefulWidget {
   @override
   WalkThroughScreenState createState() => WalkThroughScreenState();
 }
-
+ApiAcceptence _apiAcceptence=ApiAcceptence();
 class WalkThroughScreenState extends State<WalkThroughScreen> {
+  
   PageController pageController = PageController();
   MyLocaleController controller = Get.find();
   AppVersion _appVersion=AppVersion();
@@ -72,6 +75,10 @@ class WalkThroughScreenState extends State<WalkThroughScreen> {
 
   @override
   void initState() {
+    _apiAcceptence.getacceptance().then((value) {
+       apiacceptencevariable=value.toString();
+       print("apiacceptencevariable"+apiacceptencevariable.toString());
+    });
     super.initState();
     get_long();
     init();

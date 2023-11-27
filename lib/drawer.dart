@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:setappstore/Utils/general_URL.dart';
 import 'package:setappstore/auth/log_in.dart';
 import 'package:setappstore/screen/my_courses/my_courses_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -73,6 +74,7 @@ class _Drawer5State extends State<Drawer5> {
                 SizedBox(
                   height: _height / 3,
                 ),
+                apiacceptencevariable.toString()!="0"?
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -86,7 +88,8 @@ class _Drawer5State extends State<Drawer5> {
                       child: _buildDivider(),
                     ),
                   ],
-                ),
+                ):SizedBox(),
+                apiacceptencevariable.toString()!="0"?
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -139,7 +142,7 @@ class _Drawer5State extends State<Drawer5> {
                           size: 30,
                         ))
                   ],
-                ),
+                ):SizedBox(),
                 // _buildRow(Icons.email, "Contact us".tr),
                 // _buildDivider(),
               ],
@@ -333,7 +336,10 @@ class _Drawer5State extends State<Drawer5> {
   }
 
   Container bottomSheetWhatsapp(setStates) {
-    return Container(
+    print(apiacceptencevariable.toString()!="0");
+    return 
+    apiacceptencevariable.toString()!="0"?
+    Container(
       alignment: Alignment.center,
       padding: EdgeInsets.all(8),
       child: SingleChildScrollView(
@@ -401,7 +407,7 @@ class _Drawer5State extends State<Drawer5> {
           ],
         ),
       ),
-    );
+    ):Container();
   }
 
   Container contact_us(context) {

@@ -5,7 +5,8 @@ import 'package:setappstore/screen/sendmessagesystem/view/checkcode.dart';
 
 class SendAMwssage extends StatefulWidget {
   final String pass;
-  const SendAMwssage({super.key, required this.pass});
+  final String username1;
+  const SendAMwssage({super.key, required this.pass, required this.username1});
 
   @override
   State<SendAMwssage> createState() => _SendAMwssageState();
@@ -56,7 +57,7 @@ class _SendAMwssageState extends State<SendAMwssage> {
                   var formdata = formstate.currentState;
                   if (formdata!.validate()) {
                     print("true");
-                    String s = sendmessage(phonecontroller.text,widget.pass);
+                    String s = sendmessage(phonecontroller.text);
                     Future.delayed(
                       Duration(seconds: 3),
                       () {

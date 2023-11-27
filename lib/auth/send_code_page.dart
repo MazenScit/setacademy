@@ -62,11 +62,9 @@ SyriatelController _mySyriatelController=SyriatelController();
 
 class _send_code_pageState extends State<send_code_page> {
   get_pass(){
-  _mySyriatelController.getmarks().then((value) {
-     sendmessage(widget.phoneController,value.toString()).then((value){
-      mycode=value;
+     sendmessage(widget.phoneController).then((value){
+          mycode=value;
      });
-    });
 }
   @override
   void initState() {

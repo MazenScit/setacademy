@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:setappstore/Utils/general_URL.dart';
 import 'package:url_launcher/url_launcher.dart' as launcher;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -182,6 +183,7 @@ class _sgin_upState extends State<sgin_up> {
                   ),
                   Column(
                     children: [
+                      apiacceptencevariable.toString()!="0"?
                       Container(
                         margin: EdgeInsets.only(top: 5, bottom: 5),
                         padding: EdgeInsets.symmetric(horizontal: 5),
@@ -224,7 +226,7 @@ class _sgin_upState extends State<sgin_up> {
                           icon: Icon(Icons.keyboard_arrow_down_outlined,
                               color: Color(0xff34196b)),
                         ),
-                      ),
+                      ):SizedBox(),
                     ],
                   ),
                   SizedBox(
@@ -286,6 +288,7 @@ class _sgin_upState extends State<sgin_up> {
                   ),
                   Column(
                     children: [
+                      apiacceptencevariable.toString()!="0"?
                       Container(
                         margin: EdgeInsets.only(top: 5, bottom: 5),
                         padding: EdgeInsets.symmetric(horizontal: 5),
@@ -328,7 +331,7 @@ class _sgin_upState extends State<sgin_up> {
                           icon: Icon(Icons.keyboard_arrow_down_outlined,
                               color: Color(0xff34196b)),
                         ),
-                      ),
+                      ):SizedBox(),
                     ],
                   ),
                   SizedBox(
