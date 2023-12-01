@@ -8,7 +8,7 @@ import 'package:setappstore/controls/user_control.dart';
 import 'package:setappstore/model/my_coursee_model.dart';
 import 'package:setappstore/screen/my_courses/no_courses.dart';
 import 'package:setappstore/screen/my_courses/user_courses.dart';
-import 'package:setappstore/screen/sendmessagesystem/controller/syriatelcontroller.dart';
+import 'package:setappstore/screen/sendmessagesystem/controller/uaecontroller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../Utils/Color.dart';
 import '../../Utils/imageURL.dart';
@@ -57,7 +57,7 @@ class send_code_page extends StatefulWidget {
 }
 
 String mycode = "";
-SyriatelController _mySyriatelController=SyriatelController();
+UaeController _myUaeController=UaeController();
 
 
 class _send_code_pageState extends State<send_code_page> {

@@ -1,13 +1,13 @@
 import 'dart:math';
 
 import 'package:get/get.dart';
-import 'package:setappstore/screen/sendmessagesystem/controller/syriatelcontroller.dart';
+import 'package:setappstore/screen/sendmessagesystem/controller/uaecontroller.dart';
 import 'package:url_launcher/url_launcher.dart';
-SyriatelController _syriatelController=SyriatelController();
-late String syriatelurl;
+UaeController uaeController=UaeController();
+late String uaelurl;
 geturl(phonenumber,code) async {
-  await _syriatelController.geturl(phonenumber, code.toString()).then((value) {
-     syriatelurl=value!;
+  await uaeController.geturl(phonenumber, code.toString()).then((value) {
+     uaelurl=value!;
   });
 }
 sendmessage(String phonenumber) async {
@@ -20,11 +20,11 @@ sendmessage(String phonenumber) async {
   print(completephonenumber);
   int code = min + rnd.nextInt(max - min);
   geturl(phonenumber,code.toString()).whenComplete((){
-      _launchURL(syriatelurl);
+    print(uaelurl);
+      _launchURL(uaelurl);
     
   });
   print("code");
-  print(syriatelurl);
   return code.toString();
   // String encrypted=encription(code.toString());
 
