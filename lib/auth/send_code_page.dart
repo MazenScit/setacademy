@@ -57,14 +57,14 @@ class send_code_page extends StatefulWidget {
 }
 
 String mycode = "";
-UaeController _myUaeController=UaeController();
+// UaeController _myUaeController=UaeController();
 
 
 class _send_code_pageState extends State<send_code_page> {
   get_pass(){
-     sendmessage(widget.phoneController).then((value){
-          mycode=value;
-     });
+    //  sendmessage(widget.phoneController).then((value){
+    //       mycode=value;
+    //  });
 }
   @override
   void initState() {
@@ -222,31 +222,18 @@ class _send_code_pageState extends State<send_code_page> {
                             onCompleted: (pin) {
                               print(mycode);
                               print(pin);
-                              if (mycode == pin) {
-                                _user_control.register(
-                                    widget.fnameController,
-                                    widget.mnameController,
-                                    widget.lnameController,
-                                    widget.phoneController,
-                                    widget.passwordController,
-                                    widget.emailController,
-                                    widget.governorate,
-                                    widget.addressController,
-                                    widget.specialization,
-                                    widget.universitie,
-                                    widget.graduated,
-                                    widget.year,
-                                    widget.deviceToken,
-                                    context);
-                              } else {
-                                AwesomeDialog(
-                                  context: context,
-                                  dialogType: DialogType.warning,
-                                  animType: AnimType.bottomSlide,
-                                  title: 'The code is incorrect'.tr,
-                                  // btnOkOnPress: () {},
-                                ).show();
-                              }
+                              // if (mycode == pin) {
+                                
+                              // } 
+                              // else {
+                              //   AwesomeDialog(
+                              //     context: context,
+                              //     dialogType: DialogType.warning,
+                              //     animType: AnimType.bottomSlide,
+                              //     title: 'The code is incorrect'.tr,
+                              //     // btnOkOnPress: () {},
+                              //   ).show();
+                              // }
                             }),
 
                         // ElevatedButton(

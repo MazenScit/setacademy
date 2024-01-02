@@ -25,7 +25,7 @@ class start_quizzes {
     final api_token = prefs.get(key);
 
     print(api_token);
-
+      print('Authorization'+":"+ 'Bearer ${api_token.toString()}');
     String myUrl = "$serverUrl/quizzes/${id}/start";
     http.Response response = await http.post(Uri.parse(myUrl), headers: {
       'Accept': 'application/json',

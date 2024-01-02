@@ -143,7 +143,6 @@ class _loginState extends State<login> {
               // SizedBox(
               //   height: ,
               // ),
-              apiacceptencevariable.toString()!="0"?
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -171,7 +170,7 @@ class _loginState extends State<login> {
                             fontFamily: 'Cobe'),
                       )),
                 ],
-              ):SizedBox(),
+              ),
             ]),
           ),
         ),
