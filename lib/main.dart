@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:setappstore/auth/log_in.dart';
 import 'package:setappstore/screen/sendmessagesystem/controller/uaecontroller.dart';
 import 'package:setappstore/screen/welcome.dart';
-import 'package:setappstore/screen/welcome.dart';
 import 'logale/locale_Cont.dart';
 import 'logale/logale.dart';
 import 'screen/splash.dart';

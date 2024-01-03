@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:setappstore/Utils/general_URL.dart';
 import 'package:setappstore/logale/locale_Cont.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Utils/Color.dart';

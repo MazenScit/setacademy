@@ -3,11 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:setappstore/Utils/general_URL.dart';
 import 'package:setappstore/controls/get_control.dart';
 import 'package:setappstore/controls/image_profile/image_profile.dart';
 import 'package:setappstore/model/User_model.dart';
 import '../Utils/Color.dart';
+import '../Utils/general_URL.dart';
 import '../controls/user_control.dart';
 import '../model/governorates.dart';
 import '../model/specializations.dart';
@@ -206,7 +206,7 @@ class _ProfileState extends State<Profile> {
                         SizedBox(
                           height: hi / 70,
                         ),
-                        apiacceptencevariable!="0"?
+                        apiacceptencevariable.toString()!="0"?
                         Column(
                           children: [
                             Container(
@@ -312,7 +312,7 @@ class _ProfileState extends State<Profile> {
                         SizedBox(
                           height: hi / 70,
                         ),
-                        apiacceptencevariable!="0"?
+                        apiacceptencevariable.toString()!="0"?
                         Column(
                           children: [
                             Container(

@@ -18,6 +18,7 @@ class WalkThroughScreen extends StatefulWidget {
   @override
   WalkThroughScreenState createState() => WalkThroughScreenState();
 }
+bool isloading=false;
 ApiAcceptence _apiAcceptence=ApiAcceptence();
 class WalkThroughScreenState extends State<WalkThroughScreen> {
   
@@ -28,13 +29,18 @@ class WalkThroughScreenState extends State<WalkThroughScreen> {
   check() async {
     _appVersion.getAppVersion().then((value) async {
       if(value?.version!=app_veriosn){
+        setState(() {
+          isloading=true;
+        });
          Navigator.pushAndRemoveUntil(context,
           MaterialPageRoute(builder: (context) {
         return EndVersion( url:value?.url,);
       }), (route) => false);
          
       }else{
-        
+        setState(() {
+          isloading=true;
+        });
     final prefs = await SharedPreferences.getInstance();
     final key = 'api_token';
     final token_User = prefs.get(key);
@@ -52,6 +58,9 @@ class WalkThroughScreenState extends State<WalkThroughScreen> {
     });
     
   }
+
+
+  
 
   _save(String long) async {
     final prefs = await SharedPreferences.getInstance();
@@ -197,6 +206,9 @@ class WalkThroughScreenState extends State<WalkThroughScreen> {
               right: 0,
               child: TextButton(
                 onPressed: () {
+                  setState(() {
+                    isloading=true;
+                  });
                   check();
 
                   // Navigator.pushAndRemoveUntil(context,
@@ -204,11 +216,13 @@ class WalkThroughScreenState extends State<WalkThroughScreen> {
                   //   return login();
                   // }), (route) => false);
                 },
-                child: Text(
+                child: 
+                !isloading?
+                Text(
                   'Skip',
                   style: TextStyle(
                       color: Color(Colorbutton), fontWeight: FontWeight.bold),
-                ),
+                ):CircularProgressIndicator(),
               ),
             ),
           ],

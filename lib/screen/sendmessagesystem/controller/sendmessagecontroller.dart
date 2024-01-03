@@ -1,7 +1,7 @@
 // import 'dart:math';
 
 // import 'package:get/get.dart';
-// import 'package:setappstore/screen/sendmessagesystem/controller/uaecontroller.dart';
+// import 'package:setacademyapp/screen/sendmessagesystem/controller/uaecontroller.dart';
 // import 'package:url_launcher/url_launcher.dart';
 // UaeController uaeController=UaeController();
 // late String uaelurl;

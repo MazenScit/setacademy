@@ -1,7 +1,7 @@
 // import 'package:flutter/material.dart';
-// import 'package:setappstore/screen/sendmessagesystem/controller/mywidget.dart';
-// import 'package:setappstore/screen/sendmessagesystem/controller/sendmessagecontroller.dart';
-// import 'package:setappstore/screen/sendmessagesystem/view/checkcode.dart';
+// import 'package:setacademyapp/screen/sendmessagesystem/controller/mywidget.dart';
+// import 'package:setacademyapp/screen/sendmessagesystem/controller/sendmessagecontroller.dart';
+// import 'package:setacademyapp/screen/sendmessagesystem/view/checkcode.dart';
 
 // class SendAMwssage extends StatefulWidget {
 //   final String pass;
