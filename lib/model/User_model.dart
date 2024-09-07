@@ -7,6 +7,9 @@ class user_model {
   final dynamic email;
   final dynamic address;
   final dynamic image;
+  final dynamic governorate;
+  final dynamic university;
+  final dynamic specialization;
 
   user_model({
     required this.id,
@@ -17,6 +20,9 @@ class user_model {
     required this.email,
     required this.address,
     required this.image,
+    required this.governorate,
+    required this.university,
+    required this.specialization,
   });
 
   factory user_model.fromJson(Map<String, dynamic> json) {
@@ -29,6 +35,9 @@ class user_model {
       email: json['email'] as dynamic,
       address: json['address'] as dynamic,
       image: json['image'] as dynamic,
+      governorate: json['governorate'] as dynamic,
+      university: json['university'] as dynamic,
+      specialization: json['specialization'] as dynamic,
     );
   }
 }

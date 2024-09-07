@@ -39,13 +39,13 @@ class _ProfileState extends State<Profile> {
   String graduated = '1';
   List<Mgovernorates>? Lgovernorates = [];
   var governorate;
-
+  late String mygovernorate;
   List<Mspecializations>? Lspecializations = [];
   var specialization;
-
+  late String myspecialization;
   List<Muniversities>? Luniversities = [];
   var universitie;
-
+  late String myuniversitie;
   List<String> Lyear = [
     '1',
     '2',
@@ -67,6 +67,7 @@ class _ProfileState extends State<Profile> {
   getgovernorate() {
     _get_control.get_governorates().then((value) => setState(() {
           Lgovernorates = value!;
+           
         }));
   }
 
@@ -92,11 +93,18 @@ class _ProfileState extends State<Profile> {
       });
       fnameController.text = user!.first_name.toString();
       mnameController.text = user!.middle_name.toString();
-      lnameController.text = user!.first_name.toString();
+      lnameController.text = user!.last_name.toString();
       phoneController.text = user!.phone.toString();
       emailController.text = user!.email.toString();
       addressController.text = user!.address.toString();
       image = user!.image.toString();
+      print("__________________________");
+      print(user!.governorate);
+      print(governorate);
+      print("__________________________");
+      mygovernorate=user!.governorate['name'].toString();
+      myuniversitie=user!.university['name'].toString();
+      myspecialization=user!.specialization['name'].toString();
     });
   }
 
@@ -206,7 +214,13 @@ class _ProfileState extends State<Profile> {
                         SizedBox(
                           height: hi / 70,
                         ),
-                        apiacceptencevariable.toString()!="0"?
+                        form(addressController, 'Address'.tr,
+                            TextInputType.name, ''),
+                        SizedBox(
+                          height: hi / 70,
+                        ),
+                        // apiacceptencevariable.toString()!="0"?
+                        Text(mygovernorate),
                         Column(
                           children: [
                             Container(
@@ -253,15 +267,13 @@ class _ProfileState extends State<Profile> {
                               ),
                             ),
                           ],
-                        ):SizedBox(),
+                        ),
+                        // :SizedBox(),
                         SizedBox(
                           height: hi / 70,
                         ),
-                        form(addressController, 'Address'.tr,
-                            TextInputType.name, ''),
-                        SizedBox(
-                          height: hi / 70,
-                        ),
+                        
+                        Text(myspecialization),
                         Column(
                           children: [
                             Container(
@@ -312,7 +324,8 @@ class _ProfileState extends State<Profile> {
                         SizedBox(
                           height: hi / 70,
                         ),
-                        apiacceptencevariable.toString()!="0"?
+                        Text(myuniversitie),
+                        // apiacceptencevariable.toString()!="0"?
                         Column(
                           children: [
                             Container(
@@ -359,7 +372,8 @@ class _ProfileState extends State<Profile> {
                               ),
                             ),
                           ],
-                        ):SizedBox(),
+                        ),
+                        // :SizedBox(),
                         SizedBox(
                           height: hi / 70,
                         ),
@@ -448,6 +462,7 @@ class _ProfileState extends State<Profile> {
                                   specialization.toString(),
                                   graduated.toString(),
                                   year.toString(),
+                                  passwordController.text,
                                   context);
                             },
                             child: Text(

@@ -65,7 +65,6 @@ class _myCoursesState extends State<myCourses> {
   @override
   void initState() {
     secure();
-
     my_courses();
     get_long();
     // TODO: implement initState
@@ -142,7 +141,7 @@ class _myCoursesState extends State<myCourses> {
                             )
                           : List_my_courses.isEmpty
                               ? no_courses()
-                              : UserCourses(List_Courses: List_my_courses)),
+                              : UserCourses()),
                 ),
               ],
             ),

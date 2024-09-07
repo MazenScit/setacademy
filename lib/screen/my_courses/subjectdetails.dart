@@ -6,6 +6,8 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:get/get.dart';
+import 'package:otp_text_field/otp_field.dart';
+import 'package:otp_text_field/style.dart';
 // import 'package:modal_bottom_sheet/modal_bottom_sheet.dart' ;
 import 'package:setappstore/Utils/general_URL.dart';
 import 'package:setappstore/auth/sign_up.dart';
@@ -13,6 +15,7 @@ import 'package:setappstore/controls/comments/comments_control.dart';
 import 'package:setappstore/model/comment_model.dart';
 import 'package:setappstore/model/review_model.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:setappstore/screen/my_courses/my_courses_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Utils/Color.dart';
@@ -34,7 +37,7 @@ class subjectdetails extends StatefulWidget {
   @override
   State<subjectdetails> createState() => _SearchState();
 }
-
+  OtpFieldController otpController = OtpFieldController();
 bool isLoading = false;
 
 bool isLoadingchapters = false;
@@ -90,6 +93,15 @@ class _SearchState extends State<subjectdetails>
 
   @override
   void initState() {
+    print(widget.my_coursee.request.toString());
+    if(widget.my_coursee.request.toString()!="null" ){
+      print("done");
+      setState(() {
+      widget.show=false;
+      });
+      print(widget.show);
+    }
+    print(widget.show);
     check();
     get_comments();
     get_reviews();
@@ -129,6 +141,7 @@ class _SearchState extends State<subjectdetails>
                   InkWell(
                     child: Icon(
                       Icons.arrow_back,
+                      size: 30,
                     ),
                     onTap: (() {
                       Navigator.pop(context);
@@ -307,7 +320,7 @@ class _SearchState extends State<subjectdetails>
                                                           context) =>
                                                       AlertDialog(
                                                         actions: [
-                                                          contact_us(context)
+                                                          add_review(context)
                                                         ],
                                                       ));
                                             },
@@ -498,54 +511,82 @@ class _SearchState extends State<subjectdetails>
                                                                     250, 50),
                                                             primary: Color(
                                                                 Colorbutton)))
-                                                : Container(
-                                                    height: 50,
-                                                    margin:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 15),
-                                                    width: double.infinity,
-                                                    child: TextFormField(
-                                                      // textAlign: TextAlign.center,
+                                                : 
 
-                                                      keyboardType:
-                                                          TextInputType.text,
-                                                      cursorColor: Colors.black,
-                                                      controller: Code_Cont,
-                                                      decoration:
-                                                          InputDecoration(
-                                                              border:
-                                                                  OutlineInputBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8),
-                                                              ),
-                                                              filled: true,
-                                                              fillColor:
-                                                                  Colors.white,
-                                                              enabledBorder: OutlineInputBorder(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              8),
-                                                                  borderSide: BorderSide(
-                                                                      color: Color(
-                                                                          0xff34196b))),
-                                                              focusedBorder: OutlineInputBorder(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              8),
-                                                                  borderSide: BorderSide(
-                                                                      color: Color(
-                                                                          0xFF9C8FB4))),
-                                                              label: Text(
-                                                                  'Enter Code'),
-                                                              labelStyle: TextStyle(
-                                                                  color: Colors
-                                                                      .black54)),
-                                                    ),
-                                                  ),
+
+
+                                                Container(
+                                                  padding: EdgeInsets.all(10),
+                                                  child: OTPTextField(
+                                                        controller: otpController,
+                                                        length: 6,
+                                                        width: MediaQuery.of(context).size.width,
+                                                        textFieldAlignment: MainAxisAlignment.spaceAround,
+                                                        fieldWidth: 45,
+                                                        fieldStyle: FieldStyle.box,
+                                                        outlineBorderRadius: 15,
+                                                        style: TextStyle(fontSize: 17),
+                                                        onChanged: (pin) {
+                                                          print("Changed: " + pin);
+                                                        },
+                                                        onCompleted: (pin) {
+                                                           Code_Cont.text=pin.toString();
+                                                          
+                                                        }),
+                                                ),
+
+
+
+
+
+                                                // Container(
+                                                //     height: 50,
+                                                //     margin:
+                                                //         EdgeInsets.symmetric(
+                                                //             horizontal: 15),
+                                                //     width: double.infinity,
+                                                //     child: TextFormField(
+                                                //       // textAlign: TextAlign.center,
+
+                                                //       keyboardType:
+                                                //           TextInputType.text,
+                                                //       cursorColor: Colors.black,
+                                                //       controller: Code_Cont,
+                                                //       decoration:
+                                                //           InputDecoration(
+                                                //               border:
+                                                //                   OutlineInputBorder(
+                                                //                 borderRadius:
+                                                //                     BorderRadius
+                                                //                         .circular(
+                                                //                             8),
+                                                //               ),
+                                                //               filled: true,
+                                                //               fillColor:
+                                                //                   Colors.white,
+                                                //               enabledBorder: OutlineInputBorder(
+                                                //                   borderRadius:
+                                                //                       BorderRadius
+                                                //                           .circular(
+                                                //                               8),
+                                                //                   borderSide: BorderSide(
+                                                //                       color: Color(
+                                                //                           0xff34196b))),
+                                                //               focusedBorder: OutlineInputBorder(
+                                                //                   borderRadius:
+                                                //                       BorderRadius
+                                                //                           .circular(
+                                                //                               8),
+                                                //                   borderSide: BorderSide(
+                                                //                       color: Color(
+                                                //                           0xFF9C8FB4))),
+                                                //               label: Text(
+                                                //                   'Enter Code'),
+                                                //               labelStyle: TextStyle(
+                                                //                   color: Colors
+                                                //                       .black54)),
+                                                //     ),
+                                                //   ),
                                             SizedBox(
                                               height: 50,
                                             ),
@@ -560,7 +601,17 @@ class _SearchState extends State<subjectdetails>
                                                                   .toString(),
                                                               Code_Cont.text
                                                                   .toString(),
-                                                              context);
+                                                              context).whenComplete(() {
+                                                                Future.delayed(Duration(seconds: 5),(){
+                                                                  Navigator.pushAndRemoveUntil(context,
+                                                                      MaterialPageRoute(
+                                                                    builder: (context) {
+                                                                      return myCourses();
+                                                                    },
+                                                                  ), (route) => false);
+                                                                });
+                                                                
+                                                              });
                                                     },
                                                     child: Text(
                                                       'Verification'.tr,
@@ -604,7 +655,11 @@ class _SearchState extends State<subjectdetails>
                       // _requests_courses.Send_image(
                       //     widget.my_coursee.id.toString(),'', context);
                     },
-                    child: Container(
+
+                    child:
+                    widget.my_coursee.course_student.toString()=="null"?
+                    widget.my_coursee.request.toString()=="null"? 
+                    Container(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -625,8 +680,10 @@ class _SearchState extends State<subjectdetails>
                                     color: Colors.white),
                               ),
                               Text(
-                                apiacceptencevariable.toString()!="0"?
-                                " sp".tr:" \$",
+                                // apiacceptencevariable.toString()!="0"?
+                                " sp".tr,
+                                // :" \$",
+
                                 style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
@@ -643,9 +700,10 @@ class _SearchState extends State<subjectdetails>
                       width: double.infinity,
                       margin: EdgeInsets.all(15),
                       padding: EdgeInsets.all(5),
-                    ),
+                    ):SizedBox():SizedBox(),
                   )
-                : SizedBox()
+                : SizedBox(),
+                SizedBox(height: 20,)
           ],
         ),
       ),
@@ -871,12 +929,21 @@ class _SearchState extends State<subjectdetails>
           ),
           ElevatedButton(
             onPressed: () {
-              _comments
+              if (comments_Cont.text!="") {
+                _comments
                   .add_comments(widget.my_coursee.id.toString(),
                       comments_Cont.text.toString(), context)
                   .whenComplete(
                       () => Navigator.of(context, rootNavigator: true).pop());
               comments_Cont.text = '';
+              }else{
+                showDialog(context: context, builder: (context) {
+                  return AlertDialog(
+                    content: Text("add comment"),
+                  );
+                },);
+              }
+              
             },
             child: Text(
               'Send'.tr,
@@ -940,7 +1007,16 @@ class _SearchState extends State<subjectdetails>
       imageFile = File(pickedFile!.path);
       print(imageFile);
       _requests_courses.Send_image(
-          imageFile!, widget.my_coursee.id, Code_Cont.text.toString(), context);
+          imageFile!, widget.my_coursee.id, Code_Cont.text.toString(), context).whenComplete(() {
+                                          Future.delayed(Duration(seconds: 5),(){
+                                                                  Navigator.pushAndRemoveUntil(context,
+                                                                      MaterialPageRoute(
+                                                                    builder: (context) {
+                                                                      return myCourses();
+                                                                    },
+                                                                  ), (route) => false);
+                                                                });
+          });
     }
   }
 }

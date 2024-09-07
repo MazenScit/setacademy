@@ -1,18 +1,8 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 
 import 'package:http/http.dart' as http;
-import 'package:setappstore/model/categories_model.dart';
-import 'package:setappstore/model/governorates.dart';
-import 'package:setappstore/model/question_model.dart';
-import 'package:setappstore/model/specializations.dart';
-import 'package:setappstore/model/universities.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'dart:convert';
-
 import '../../Utils/general_URL.dart';
-import '../../model/lessons_model.dart';
-import '../../model/my_coursee_model.dart';
 import '../../model/quizzes_model.dart';
 
 // ignore: camel_case_types
@@ -61,7 +51,7 @@ class finish_quizzes {
     final api_token = prefs.get(key);
     final long = prefs.get('long');
 
-    print(answers);
+    print(answers.toString());
 
     String myUrl = "$serverUrl/quizzes/${id}/finish";
     http.Response response = await http.post(
@@ -79,6 +69,13 @@ class finish_quizzes {
     print(response.statusCode);
     print(response.body);
     if (response.statusCode == 200) {
+      try {
+        return jsonDecode(response.body);
+      } catch (error) {
+        print(error);
+
+        return null;
+      }
     } else {
       print(response.body);
       // throw "Error While getting Properties";

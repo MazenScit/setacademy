@@ -2,33 +2,29 @@ import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:setappstore/Utils/general_URL.dart';
-import 'package:setappstore/Utils/imageURL.dart';
+import 'package:setappstore/model/categories_model.dart';
+import 'package:setappstore/screen/my_courses/my_courses_screen.dart';
+import 'package:setappstore/screen/subcategories.dart';
 
-import '../../Utils/Color.dart';
-import '../../controls/get_control.dart';
-import '../../model/categories_model.dart';
-import '../../model/chapters_model.dart';
-import '../../model/my_coursee_model.dart';
-import '../../model/subcategories.dart';
-import '../chapters/courses.dart';
-import '../my_courses/subjectdetails.dart';
+import '../Utils/Color.dart';
+import '../Utils/imageURL.dart';
+import '../controls/get_control.dart';
 
-class sub2 extends StatefulWidget {
-  String id;
-  String name;
-  sub2({Key? key, required this.id, required this.name}) : super(key: key);
+class Courses extends StatefulWidget {
+  const Courses({Key? key}) : super(key: key);
 
   @override
-  State<sub2> createState() => _sub2State();
+  State<Courses> createState() => _CoursesState();
 }
 
-class _sub2State extends State<sub2> {
+class _CoursesState extends State<Courses> {
+  bool isloading = true;
   get_Control _get_control = get_Control();
-  List<my_coursee_model> _subcategories = [];
+  List<categories_model> _categories = [];
 
   getCategories() {
-    _get_control.get_courses(widget.id.toString()).then((value) => setState(() {
-          _subcategories = value!;
+    _get_control.get_categories().then((value) => setState(() {
+          _categories = value!;
           isloading = false;
         }));
   }
@@ -37,20 +33,18 @@ class _sub2State extends State<sub2> {
     await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
   }
 
-  bool isloading = true;
-
   @override
   void initState() {
+    getCategories();
     secure();
-    // getCategories();
     // TODO: implement initState
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    double hi = MediaQuery.of(context).size.height;
     double wi = MediaQuery.of(context).size.width;
+    double hi = MediaQuery.of(context).size.height;
     return Scaffold(
       body: ColorfulSafeArea(
         color: Colors.black,
@@ -87,33 +81,26 @@ class _sub2State extends State<sub2> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SizedBox(
-                        width: 50,
-                      ),
-                      Text(
-                        widget.name.toString(),
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontFamily: 'Cobe',
-                            fontWeight: FontWeight.bold),
-                      ),
                       IconButton(
                           onPressed: () {
-                            Navigator.of(context).pop();
+                            Navigator.pushAndRemoveUntil(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return myCourses();
+                                }), (route) => false);
                           },
                           icon: Icon(
-                            Icons.arrow_forward,
+                            Icons.arrow_back,
                             color: Colors.white,
                             size: 30,
-                          ))
+                          )),
+                      Image.asset(logo),
                     ],
                   ),
                 ),
                 Expanded(
                   flex: 6,
                   child: Container(
-                    padding: EdgeInsets.all(15),
+                    padding: EdgeInsets.all(10),
                     width: wi,
                     decoration: BoxDecoration(
                         color: Colors.white,
@@ -125,12 +112,12 @@ class _sub2State extends State<sub2> {
                             color: Color(Colorbutton),
                           ))
                         : GridView.builder(
-                            itemCount: _subcategories.length,
+                            itemCount: _categories.length,
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
                                     childAspectRatio: (1.2), crossAxisCount: 2),
                             itemBuilder: (BuildContext context, int index) {
-                              return items(_subcategories[index]);
+                              return items(_categories[index]);
                             },
                           ),
                   ),
@@ -143,17 +130,14 @@ class _sub2State extends State<sub2> {
     );
   }
 
-  Widget items(my_coursee_model subCat) {
+  Widget items(categories_model categorie) {
     return InkWell(
       onTap: () {
-        // print(subCat.id);
-
-        // Navigator.push(context, MaterialPageRoute(builder: (context) {
-        //   return subjectdetails(
-        //     courses: subCat,
-        //     isShow: true,
-        //   );
-        // }));
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return subcategories(
+            Cat: categorie,
+          );
+        }));
       },
       child: Card(
         elevation: 8,
@@ -161,11 +145,11 @@ class _sub2State extends State<sub2> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Image.network(
-              subCat.image.toString(),
+              categorie.image.toString(),
               height: 100,
             ),
             Text(
-              subCat.code.toString(),
+              categorie.name.toString(),
               overflow: TextOverflow.ellipsis,
               style: TextStyle(fontFamily: 'Cobe', fontWeight: FontWeight.bold),
             )

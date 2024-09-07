@@ -31,7 +31,7 @@ class get_lessons {
     http.Response response = await http.get(Uri.parse(myUrl), headers: {
       'Accept': 'application/json',
       'Authorization': 'Bearer ${api_token.toString()}',
-      'long': long.toString()
+      'lang': long.toString()
     });
     print(myUrl);
     print(response.statusCode);

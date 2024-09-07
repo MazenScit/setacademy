@@ -1,10 +1,11 @@
 import 'dart:io';
-import 'package:device_info_plus/device_info_plus.dart';
+// import 'package:device_info_plus/device_info_plus.dart';
+import 'package:device_info/device_info.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:setappstore/Utils/general_URL.dart';
 import 'package:url_launcher/url_launcher.dart' as launcher;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:setappstore/auth/send_code_page.dart';
 import 'package:setappstore/controls/get_control.dart';
 import '../Utils/Color.dart';
 import '../controls/user_control.dart';
@@ -19,12 +20,14 @@ class sgin_up extends StatefulWidget {
   @override
   State<sgin_up> createState() => _sgin_upState();
 }
-
+String phonecode="+";
+String phonenumber="+";
+String countrycode="SY";
 class _sgin_upState extends State<sgin_up> {
   TextEditingController fnameController = TextEditingController();
   TextEditingController mnameController = TextEditingController();
   TextEditingController lnameController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
+  // TextEditingController phoneController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController passwordConfController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -45,21 +48,26 @@ class _sgin_upState extends State<sgin_up> {
   var universitie;
 
   String? deviceToken;
-  gettoken() async {
-    var deviceInfo = DeviceInfoPlugin();
+gettoken() async {
+    // var deviceInfo = DeviceInfoPlugin();
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+
+  try {
     if (Platform.isAndroid) {
-      var androidDeviceInfo = await deviceInfo.androidInfo;
-      String deviceId = androidDeviceInfo.id;
-      String deviceModel = androidDeviceInfo.model;
-      String deviceManufacturer = androidDeviceInfo.manufacturer;
-      deviceToken = deviceId + deviceModel + deviceManufacturer;
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      print(androidInfo.androidId);
+      deviceToken=apiacceptencevariable.toString()=="1"?( androidInfo.androidId+androidInfo.device+androidInfo.manufacturer+androidInfo.model):(androidInfo.device+androidInfo.manufacturer+androidInfo.model);
+      print(deviceToken);
+      return androidInfo.androidId;
     } else if (Platform.isIOS) {
-      var iosDeviceInfo = await deviceInfo.iosInfo;
-      String? deviceId = iosDeviceInfo.identifierForVendor;
-      String? deviceModel = iosDeviceInfo.model;
-      String deviceManufacturer = "Apple";
-      deviceToken = deviceId! + deviceModel! + deviceManufacturer;
+      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+      deviceToken= iosInfo.identifierForVendor+iosInfo.model;
+      return iosInfo.identifierForVendor;
     }
+   
+  } catch (e) {
+    print('Error getting device ID: $e');
+  }
   }
 
   List<String> Lyear = [
@@ -160,7 +168,27 @@ class _sgin_upState extends State<sgin_up> {
                   SizedBox(
                     height: hi / 70,
                   ),
-                  form(phoneController, 'Phone'.tr, TextInputType.phone),
+                  IntlPhoneField(
+                    validator: (p0) {
+                      if(phonecode=="+"){
+                        return "enter mobile number";
+                      }
+                    },
+                                decoration: InputDecoration(
+                                    labelText: 'Phone Number',
+                                    border: OutlineInputBorder(
+                                        borderSide: BorderSide(),
+                                    ),
+                                ),
+                                initialCountryCode: 'SY',
+                                onChanged: (phone) {
+                                  phonenumber=phone.number;
+                                  countrycode=phone.countryCode;
+                                  phonecode=(phone.countryCode.toString()+ phone.number.substring(1,10)) as String;
+                                    print(phonecode);
+                                },
+                           ),
+                  // form(phoneController, 'Phone'.tr, TextInputType.phone),
                   SizedBox(
                     height: hi / 70,
                   ),
@@ -180,7 +208,7 @@ class _sgin_upState extends State<sgin_up> {
                   ),
                   Column(
                     children: [
-                      apiacceptencevariable.toString()!="0"?
+                      // apiacceptencevariable.toString()!="0"?
                       Container(
                         margin: EdgeInsets.only(top: 5, bottom: 5),
                         padding: EdgeInsets.symmetric(horizontal: 5),
@@ -223,7 +251,8 @@ class _sgin_upState extends State<sgin_up> {
                           icon: Icon(Icons.keyboard_arrow_down_outlined,
                               color: Color(0xff34196b)),
                         ),
-                      ):SizedBox(),
+                      ),
+                      // :SizedBox(),
                     ],
                   ),
                   SizedBox(
@@ -285,7 +314,7 @@ class _sgin_upState extends State<sgin_up> {
                   ),
                   Column(
                     children: [
-                      apiacceptencevariable.toString()!="0"?
+                      // apiacceptencevariable.toString()!="0"?
                       Container(
                         margin: EdgeInsets.only(top: 5, bottom: 5),
                         padding: EdgeInsets.symmetric(horizontal: 5),
@@ -328,7 +357,8 @@ class _sgin_upState extends State<sgin_up> {
                           icon: Icon(Icons.keyboard_arrow_down_outlined,
                               color: Color(0xff34196b)),
                         ),
-                      ):SizedBox(),
+                      )
+                      // :SizedBox(),
                     ],
                   ),
                   SizedBox(
@@ -452,32 +482,21 @@ class _sgin_upState extends State<sgin_up> {
                                 backgroundColor: Colors.red,
                               ));
                             } else {
-                              // Navigator.push(context, MaterialPageRoute(
-                              //     builder: (BuildContext context) {
-                              //   return send_code_page(
-                              //     phone: phoneController.text.toString(),
-                              //     addressController:
-                              //         addressController.text.toString(),
-                              //     deviceToken: deviceToken.toString(),
-                              //     emailController:
-                              //         emailController.text.toString(),
-                              //     fnameController:
-                              //         fnameController.text.toString(),
-                              //     governorate: governorate.toString(),
-                              //     graduated: graduated.toString(),
-                              //     lnameController:
-                              //         lnameController.text.toString(),
-                              //     mnameController:
-                              //         mnameController.text.toString(),
-                              //     passwordController:
-                              //         passwordConfController.text.toString(),
-                              //     phoneController:
-                              //         phoneController.text.toString(),
-                              //     specialization: specialization.toString(),
-                              //     universitie: universitie.toString(),
-                              //     year: year.toString(),
-                              //   );
-                              // }));
+                              _user_control.register(
+                                    fnameController.text,
+                                    mnameController.text,
+                                    lnameController.text,
+                                    phonenumber,
+                                    passwordController.text,
+                                    emailController.text,
+                                    governorate,
+                                    addressController.text,
+                                    specialization,
+                                    universitie.toString(),
+                                    graduated.toString(),
+                                    year,
+                                    deviceToken!,
+                                    context);
                               // _user_control.send_code(
                               //     phoneController.text.toString(), context);
                               //   print(universitie);
@@ -494,21 +513,21 @@ class _sgin_upState extends State<sgin_up> {
                               //   print(addressController.text);
                               //   print(graduated);
                               //   print(deviceToken);
-                              _user_control.register(
-                                  fnameController.text.toString(),
-                                  mnameController.text.toString(),
-                                  lnameController.text.toString(),
-                                  phoneController.text.toString(),
-                                  passwordController.text.toString(),
-                                  emailController.text.toString(),
-                                  apiacceptencevariable.toString()!="0"?governorate.toString():"2",
-                                  addressController.text.toString(),
-                                  specialization.toString(),
-                                  apiacceptencevariable.toString()!="0"?universitie.toString():"2",
-                                  graduated.toString(),
-                                  year.toString(),
-                                  deviceToken.toString(),
-                                  context);
+                              // _user_control.register(
+                              //     fnameController.text.toString(),
+                              //     mnameController.text.toString(),
+                              //     lnameController.text.toString(),
+                              //     phoneController.text.toString(),
+                              //     passwordController.text.toString(),
+                              //     emailController.text.toString(),
+                              //     apiacceptencevariable.toString()!="0"?governorate.toString():"2",
+                              //     addressController.text.toString(),
+                              //     specialization.toString(),
+                              //     apiacceptencevariable.toString()!="0"?universitie.toString():"2",
+                              //     graduated.toString(),
+                              //     year.toString(),
+                              //     deviceToken.toString(),
+                              //     context);
                             }
                           },
                           child: Text(

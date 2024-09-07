@@ -13,6 +13,7 @@ class my_coursee_model {
   final dynamic watching_ratio;
   final dynamic hours;
   final dynamic chapters_count;
+  final dynamic course_student;
 
   my_coursee_model({
     required this.id,
@@ -29,6 +30,7 @@ class my_coursee_model {
     required this.watching_ratio,
     required this.hours,
     required this.chapters_count,
+    required this.course_student,
   });
 
   factory my_coursee_model.fromJson(Map<String, dynamic> json) {
@@ -47,6 +49,7 @@ class my_coursee_model {
       watching_ratio: json['watching_ratio'] as dynamic,
       hours: json['hours'] as dynamic,
       chapters_count: json['chapters_count'] as dynamic,
+      course_student: json['course_student'] as dynamic,
     );
   }
 }

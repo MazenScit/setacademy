@@ -13,7 +13,7 @@ import '../screen/my_courses/my_courses_screen.dart';
 
 // ignore: camel_case_types
 class User_Control {
-  login(context, String username, String password, String device_token) async {
+  Future login(context, String username, String password, String device_token) async {
     var myUrl = Uri.parse("$serverUrl/login");
     final response = await http.post(myUrl, body: {
       "phone": username,
@@ -27,7 +27,7 @@ class User_Control {
     print(response.statusCode);
 
     if (response.statusCode == 200) {
-      _save(json.decode(response.body)['api_token'].toString());
+      _save(json.decode(response.body)['api_token'].toString(),username,password);
 
       print('Done');
       Navigator.pushAndRemoveUntil(context,
@@ -47,6 +47,29 @@ class User_Control {
         // btnOkOnPress: () {},
       )..show();
   }
+
+  checklogin(context, String username, String password, String device_token) async {
+    var myUrl = Uri.parse("$serverUrl/login");
+    final response = await http.post(myUrl, body: {
+      "phone": username,
+      "password": password,
+      'device_token': device_token
+    });
+
+    print(device_token);
+
+    print(response.body);
+    print(response.statusCode);
+
+    if (response.statusCode == 200) {
+      return true;
+      // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+      //   return myCourses();
+      // }));
+    } else
+      return false;
+  }
+
 
   Future register(
       String first_name,
@@ -84,7 +107,7 @@ class User_Control {
 
     print(response.body);
     if (response.statusCode == 200) {
-      _save(json.decode(response.body)['api_token'].toString());
+      _save(json.decode(response.body)['api_token'].toString(),phone,password);
 
       Navigator.pushAndRemoveUntil(context,
           MaterialPageRoute(builder: (context) {
@@ -145,13 +168,15 @@ class User_Control {
       String specialization,
       String graduated,
       String year,
+      String password,
       context) async {
     final prefs = await SharedPreferences.getInstance();
     final key = 'api_token';
     final value = prefs.get(key);
-
+    print("university : $university");
+    print("pass :"+password);
     String myUrl = "$serverUrl/profile";
-    http.Response response = await http.put(Uri.parse(myUrl), headers: {
+    http.Response response = await http.post(Uri.parse(myUrl), headers: {
       'Authorization': 'Bearer $value',
       'Accept': 'application/json'
     }, body: {
@@ -160,12 +185,14 @@ class User_Control {
       'last_name': last_name,
       'email': email,
       'phone': phone,
-      'governorate': governorate,
+      'governorate_id': governorate,
       'address': address,
-      'university': university,
-      'specialization': specialization,
+      'university_id': university,
+      'specialization_id': specialization,
       'graduated': graduated,
       'year': year,
+      'password':password,
+      'password_confirmation':password,
     });
 
     print(response.body);
@@ -255,10 +282,19 @@ class User_Control {
     }
   }
 
-  _save(String token) async {
+  _save(String token,String phone,String password) async {
     final prefs = await SharedPreferences.getInstance();
     final key = 'api_token';
     final value = token;
     prefs.setString(key, value);
+
+
+    final keyphone = 'phone';
+    final valuephone = phone;
+    prefs.setString(keyphone, valuephone);
+
+    final keypassword = 'password';
+    final valuepassword = password;
+    prefs.setString(keypassword, valuepassword);
   }
 }

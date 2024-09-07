@@ -74,7 +74,7 @@ class _Drawer5State extends State<Drawer5> {
                 SizedBox(
                   height: _height / 3,
                 ),
-                apiacceptencevariable.toString()!="0"?
+                // apiacceptencevariable.toString()!="0"?
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -88,8 +88,9 @@ class _Drawer5State extends State<Drawer5> {
                       child: _buildDivider(),
                     ),
                   ],
-                ):SizedBox(),
-                apiacceptencevariable.toString()!="0"?
+                ),
+                // :SizedBox(),
+                // apiacceptencevariable.toString()!="0"?
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -142,7 +143,8 @@ class _Drawer5State extends State<Drawer5> {
                           size: 30,
                         ))
                   ],
-                ):SizedBox(),
+                )
+                // :SizedBox(),
                 // _buildRow(Icons.email, "Contact us".tr),
                 // _buildDivider(),
               ],
@@ -171,8 +173,8 @@ class _Drawer5State extends State<Drawer5> {
         } else if (title == 'Language'.tr) {
           showDialog(
               context: context,
-              builder: (BuildContext context) => AlertDialog(
-                    actions: [dialogOffers()],
+              builder: (BuildContext context2) => AlertDialog(
+                    actions: [dialogOffers(context2)],
                   ));
         } else if (title == 'Complaints'.tr) {
           showDialog(
@@ -229,7 +231,7 @@ class _Drawer5State extends State<Drawer5> {
     );
   }
 
-  Container dialogOffers() {
+  Container dialogOffers(context) {
     return Container(
       alignment: Alignment.center,
       padding: EdgeInsets.all(8),
@@ -246,11 +248,11 @@ class _Drawer5State extends State<Drawer5> {
           SizedBox(
             height: 35,
           ),
-          button('Arabic', 'ar'),
+          button('Arabic', 'ar',context),
           SizedBox(
             height: 25,
           ),
-          button('English', 'en'),
+          button('English', 'en',context),
         ],
       ),
     );
@@ -336,9 +338,9 @@ class _Drawer5State extends State<Drawer5> {
   }
 
   Container bottomSheetWhatsapp(setStates) {
-    print(apiacceptencevariable.toString()!="0");
+    // print(apiacceptencevariable.toString()!="0");
     return 
-    apiacceptencevariable.toString()!="0"?
+    // apiacceptencevariable.toString()!="0"?
     Container(
       alignment: Alignment.center,
       padding: EdgeInsets.all(8),
@@ -407,7 +409,8 @@ class _Drawer5State extends State<Drawer5> {
           ],
         ),
       ),
-    ):Container();
+    );
+    // :Container();
   }
 
   Container contact_us(context) {
@@ -470,7 +473,7 @@ class _Drawer5State extends State<Drawer5> {
     );
   }
 
-  Column button(String title, String long) {
+  Column button(String title, String long,context) {
     return Column(
       children: [
         ElevatedButton(
@@ -479,10 +482,13 @@ class _Drawer5State extends State<Drawer5> {
               print(long);
               controller.changeLang(long);
               _save(long);
-              Navigator.pushReplacement(context,
+              Future.delayed(Duration(seconds: 3),(){
+                Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (context) {
                 return myCourses();
               }));
+              });
+              
             });
             Navigator.of(context).pop();
           },

@@ -1,13 +1,13 @@
 import 'dart:io';
-
-import 'package:device_info_plus/device_info_plus.dart';
+import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:setappstore/Utils/general_URL.dart';
 import 'package:setappstore/logale/locale_Cont.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Utils/Color.dart';
 import '../controls/user_control.dart';
-import '../screen/courses/courses_screen.dart';
+import '../screen/courses_screen.dart';
 import 'sign_up.dart';
 
 class login extends StatefulWidget {
@@ -16,7 +16,7 @@ class login extends StatefulWidget {
   @override
   State<login> createState() => _loginState();
 }
-
+bool isbuttonpresses=false;
 class _loginState extends State<login> {
   TextEditingController PhoneController = TextEditingController();
   TextEditingController PassController = TextEditingController();
@@ -27,24 +27,29 @@ class _loginState extends State<login> {
 
   var deviceToken;
   gettoken() async {
-    var deviceInfo = DeviceInfoPlugin();
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+
+  try {
     if (Platform.isAndroid) {
-      var androidDeviceInfo = await deviceInfo.androidInfo;
-      String deviceId = androidDeviceInfo.id;
-      String deviceModel = androidDeviceInfo.model;
-      String deviceManufacturer = androidDeviceInfo.manufacturer;
-      deviceToken = deviceId + deviceModel + deviceManufacturer;
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      print(androidInfo.androidId);
+      deviceToken=apiacceptencevariable.toString()=="1"?( androidInfo.androidId+androidInfo.device+androidInfo.manufacturer+androidInfo.model):(androidInfo.device+androidInfo.manufacturer+androidInfo.model);
+      print(deviceToken);
+      return androidInfo.androidId;
     } else if (Platform.isIOS) {
-      var iosDeviceInfo = await deviceInfo.iosInfo;
-      String? deviceId = iosDeviceInfo.identifierForVendor;
-      String? deviceModel = iosDeviceInfo.model;
-      String deviceManufacturer = "Apple";
-      deviceToken = deviceId! + deviceModel! + deviceManufacturer;
+      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+      deviceToken= iosInfo.identifierForVendor+iosInfo.model;
+      return iosInfo.identifierForVendor;
     }
+   
+  } catch (e) {
+    print('Error getting device ID: $e');
+  }
   }
 
   @override
   void initState() {
+    isbuttonpresses=false;
     get_long();
     gettoken();
     // TODO: implement initState
@@ -107,7 +112,8 @@ class _loginState extends State<login> {
               SizedBox(
                 height: hi / 20,
               ),
-              button('LOG IN'.tr),
+              !isbuttonpresses?
+              button('LOG IN'.tr):CircularProgressIndicator(),
               SizedBox(
                 height: hi / 20,
               ),
@@ -139,9 +145,7 @@ class _loginState extends State<login> {
                       )),
                 ],
               ),
-              // SizedBox(
-              //   height: ,
-              // ),
+             
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -244,6 +248,7 @@ class _loginState extends State<login> {
       children: [
         ElevatedButton(
             onPressed: () {
+              
               loginUser();
             },
             child: Text(
@@ -287,13 +292,19 @@ class _loginState extends State<login> {
         backgroundColor: Colors.red,
       ));
     } else {
-      _user_control.login(context, _Phone, _password, deviceToken);
-      // Navigator.push(context,
-      //     MaterialPageRoute(builder: (BuildContext context) {
-      //   return home(
-      //     type: type.toString(),
-      //   );
-      // }));
+      setState(() {
+                isbuttonpresses=true;
+              });
+       _user_control.login(context, _Phone, _password, deviceToken).whenComplete((){
+        setState(() {
+          isbuttonpresses=false;
+        });
+      }).onError((error, stackTrace) {
+        setState(() {
+          isbuttonpresses=false;
+        });
+      });
+     
     }
   }
 }

@@ -1,20 +1,8 @@
 import 'dart:io';
-
-import 'package:awesome_dialog/awesome_dialog.dart';
-
 import 'package:http/http.dart' as http;
 import 'package:setappstore/model/appversionmodel.dart';
-import 'package:setappstore/model/categories_model.dart';
-import 'package:setappstore/model/governorates.dart';
-import 'package:setappstore/model/specializations.dart';
-import 'package:setappstore/model/universities.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'dart:convert';
-
-import '../../Utils/general_URL.dart';
-import '../../model/lessons_model.dart';
-import '../../model/my_coursee_model.dart';
 
 // ignore: camel_case_types
 class AppVersion {
@@ -39,18 +27,15 @@ class AppVersion {
       try {
         AppVersionModel user;
         if (Platform.isAndroid) {
-            // Android-specific code
-             user =
-            AppVersionModel.fromJson(jsonDecode(response.body)['Android']);
-          } else if (Platform.isIOS) {
-            // iOS-specific code
-             user =
-            AppVersionModel.fromJson(jsonDecode(response.body)['IOS']);
-         }else{
-          user =
-            AppVersionModel.fromJson(jsonDecode(response.body)['Android']);
-         }
-        
+          // Android-specific code
+          user = AppVersionModel.fromJson(jsonDecode(response.body)['Android']);
+        } else if (Platform.isIOS) {
+          // iOS-specific code
+          user = AppVersionModel.fromJson(jsonDecode(response.body)['IOS']);
+        } else {
+          user = AppVersionModel.fromJson(jsonDecode(response.body)['Android']);
+        }
+
         return user;
       } catch (error) {
         print(error);

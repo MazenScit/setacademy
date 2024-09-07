@@ -2,14 +2,12 @@ import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:setappstore/Utils/imageURL.dart';
-import 'package:setappstore/model/chapters_model.dart';
-import 'package:setappstore/screen/subFile/subFile.dart';
 
-import '../../Utils/Color.dart';
-import '../../controls/get_control.dart';
-import '../../model/my_coursee_model.dart';
-import '../../model/subcategories.dart';
-import '../my_courses/subjectdetails.dart';
+import '../Utils/Color.dart';
+import '../controls/get_control.dart';
+import '../model/my_coursee_model.dart';
+import '../model/subcategories.dart';
+import 'my_courses/subjectdetails.dart';
 
 class chapters extends StatefulWidget {
   subcategories_model sub;
@@ -162,8 +160,8 @@ class _chaptersState extends State<chapters> {
           overflow: TextOverflow.ellipsis,
           style: TextStyle(fontFamily: 'Cobe', fontWeight: FontWeight.bold),
         ),
-        leading: Image.asset(
-          logo,
+        leading: Image.network(
+          courses.image,
           height: 75,
         ),
         trailing: Text(courses.type.toString()),

@@ -9,6 +9,7 @@ class new_lessons_model {
   dynamic free;
   dynamic drive_url;
   dynamic subscribed;
+  dynamic use_resource;
 
   new_lessons_model({
     required this.id,
@@ -21,7 +22,7 @@ class new_lessons_model {
     required this.free,
     required this.drive_url,
     required this.subscribed,
-    
+    required this.use_resource,
   });
 
   factory new_lessons_model.fromJson(Map<String, dynamic> json) {
@@ -36,6 +37,7 @@ class new_lessons_model {
       free: json['free'] as dynamic,
       drive_url: json['drive_url'] as dynamic,
       subscribed:json['subscribed'] as dynamic,
+      use_resource:json['use_resource'] as dynamic,
     );
   }
 }

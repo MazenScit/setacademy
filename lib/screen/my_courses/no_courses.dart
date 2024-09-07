@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 
 import '../../Utils/Color.dart';
 import '../../Utils/imageURL.dart';
-import '../courses/courses_screen.dart';
+import '../courses_screen.dart';
 
 class no_courses extends StatefulWidget {
   const no_courses({Key? key}) : super(key: key);

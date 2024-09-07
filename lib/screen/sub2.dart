@@ -4,43 +4,45 @@ import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:setappstore/Utils/general_URL.dart';
 import 'package:setappstore/Utils/imageURL.dart';
 
-import '../../Utils/Color.dart';
-import '../../controls/get_control.dart';
-import '../../model/categories_model.dart';
-import '../../model/subcategories.dart';
-import '../chapters/courses.dart';
+import '../Utils/Color.dart';
+import '../controls/get_control.dart';
+import '../model/categories_model.dart';
+import '../model/chapters_model.dart';
+import '../model/my_coursee_model.dart';
+import '../model/subcategories.dart';
+import 'courses.dart';
+import 'my_courses/subjectdetails.dart';
 
-class subcategories extends StatefulWidget {
-  categories_model Cat;
-  subcategories({Key? key, required this.Cat}) : super(key: key);
+class sub2 extends StatefulWidget {
+  String id;
+  String name;
+  sub2({Key? key, required this.id, required this.name}) : super(key: key);
 
   @override
-  State<subcategories> createState() => _subcategoriesState();
+  State<sub2> createState() => _sub2State();
 }
 
-class _subcategoriesState extends State<subcategories> {
-  secure() async {
-    await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
-  }
-
+class _sub2State extends State<sub2> {
   get_Control _get_control = get_Control();
-  List<subcategories_model> _subcategories = [];
+  List<my_coursee_model> _subcategories = [];
 
   getCategories() {
-    _get_control
-        .get_subcategories(widget.Cat.id.toString())
-        .then((value) => setState(() {
-              _subcategories = value!;
-              isloading = false;
-            }));
+    _get_control.get_courses(widget.id.toString()).then((value) => setState(() {
+          _subcategories = value!;
+          isloading = false;
+        }));
+  }
+
+  secure() async {
+    // await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
   }
 
   bool isloading = true;
 
   @override
   void initState() {
-    getCategories();
     secure();
+    // getCategories();
     // TODO: implement initState
     super.initState();
   }
@@ -53,12 +55,11 @@ class _subcategoriesState extends State<subcategories> {
       body: ColorfulSafeArea(
         color: Colors.black,
         child: Container(
+          color: Colors.red,
           child: SafeArea(
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal:10),
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                
                 begin: Alignment.centerRight,
                 end: Alignment.centerLeft,
                 colors: [
@@ -69,44 +70,43 @@ class _subcategoriesState extends State<subcategories> {
             ),
             child: Column(
               children: [
-                Container(
-                  height: 20,
-                  alignment: Alignment.centerLeft,
-                  child: IconButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      icon: Icon(
-                        Icons.arrow_back,
-                        color: Colors.white,
-                        size: 30,
-                      )),
-                ),
+                // Container(
+                //   padding: EdgeInsets.only(top: 5),
+                //   child: Row(
+                //     children: [
+                //       IconButton(
+                //           onPressed: () {
+                //             Navigator.pop(context);
+                //           },
+                //           icon: Icon(Icons.arrow_back_ios))
+                //     ],
+                //   ),
+                // ),
                 SizedBox(
                   height: hi / 6,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // IconButton(
-                      //     onPressed: () {
-                      //       Navigator.of(context).pop();
-                      //     },
-                      //     icon: Icon(
-                      //       Icons.arrow_back,
-                      //       color: Colors.white,
-                      //       size: 30,
-                      //     )),
+                      SizedBox(
+                        width: 50,
+                      ),
                       Text(
-                        widget.Cat.name.toString(),
+                        widget.name.toString(),
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 18,
                             fontFamily: 'Cobe',
                             fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(
-                        width: 50,
-                      ),
+                      IconButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          icon: Icon(
+                            Icons.arrow_forward,
+                            color: Colors.white,
+                            size: 30,
+                          ))
                     ],
                   ),
                 ),
@@ -130,8 +130,7 @@ class _subcategoriesState extends State<subcategories> {
                                 SliverGridDelegateWithFixedCrossAxisCount(
                                     childAspectRatio: (1.2), crossAxisCount: 2),
                             itemBuilder: (BuildContext context, int index) {
-                              return 
-                              items(_subcategories[index]);
+                              return items(_subcategories[index]);
                             },
                           ),
                   ),
@@ -144,14 +143,17 @@ class _subcategoriesState extends State<subcategories> {
     );
   }
 
-  Widget items(subcategories_model subCat) {
+  Widget items(my_coursee_model subCat) {
     return InkWell(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return chapters(
-            sub: subCat,
-          );
-        }));
+        // print(subCat.id);
+
+        // Navigator.push(context, MaterialPageRoute(builder: (context) {
+        //   return subjectdetails(
+        //     courses: subCat,
+        //     isShow: true,
+        //   );
+        // }));
       },
       child: Card(
         elevation: 8,
@@ -163,7 +165,7 @@ class _subcategoriesState extends State<subcategories> {
               height: 100,
             ),
             Text(
-              subCat.name.toString(),
+              subCat.code.toString(),
               overflow: TextOverflow.ellipsis,
               style: TextStyle(fontFamily: 'Cobe', fontWeight: FontWeight.bold),
             )

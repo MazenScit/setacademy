@@ -1,4 +1,5 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
@@ -8,8 +9,13 @@ import 'package:setappstore/Utils/general_URL.dart';
 import 'package:setappstore/model/lessons_model.dart';
 import 'package:setappstore/model/question_model.dart';
 import 'package:setappstore/model/quizzes_model.dart';
+import 'package:setappstore/screen/Content/testresult.dart';
+import 'package:setappstore/screen/Content/video/chewieVideoPlayer.dart';
+import 'package:setappstore/screen/Content/video/filedownloader.dart';
+import 'package:setappstore/screen/Content/video/testScreen.dart';
 import 'package:setappstore/screen/Content/video/video.dart';
 import 'package:setappstore/screen/Content/video/videoapp.dart';
+import 'package:setappstore/screen/my_courses/my_courses_screen.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../Utils/Color.dart';
@@ -22,7 +28,6 @@ import '../../controls/quizzes/start.dart';
 import '../../model/chapters_model.dart';
 import '../../model/files_model.dart';
 import '../../model/my_coursee_model.dart';
-import '../subFile/subFile.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class Content extends StatefulWidget {
@@ -34,7 +39,8 @@ class Content extends StatefulWidget {
   @override
   State<Content> createState() => _ContentState();
 }
-
+int trytofail=0;
+bool _onFinishButtonPresses=false;
 class _ContentState extends State<Content> with SingleTickerProviderStateMixin {
   secure() async {
     await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
@@ -75,6 +81,7 @@ class _ContentState extends State<Content> with SingleTickerProviderStateMixin {
         .quizzes(widget.courses.id.toString())
         .then((value) => setState(() {
               _quizzes = value!;
+              print("_quizzes${_quizzes[0].title}");
               isloading3 = false;
             }));
   }
@@ -166,6 +173,8 @@ class _ContentState extends State<Content> with SingleTickerProviderStateMixin {
 
   @override
   void initState() {
+    trytofail=0;
+    _onFinishButtonPresses=false;
     print(widget.courses.id);
     getfiles();
     get_lessonss();
@@ -217,7 +226,7 @@ class _ContentState extends State<Content> with SingleTickerProviderStateMixin {
               ),
             ),
             Container(
-              height: 200,
+              height: 100,
               decoration: BoxDecoration(
                   image: DecorationImage(
                       image:
@@ -227,12 +236,15 @@ class _ContentState extends State<Content> with SingleTickerProviderStateMixin {
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 children: [
-                  Text(
-                    widget.courses.title.toString(),
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontFamily: 'Cobe',
-                      fontWeight: FontWeight.bold,
+                  Container(
+                    width: 320,
+                    child: Text(
+                      widget.courses.title.toString(),
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontFamily: 'Cobe',
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ],
@@ -291,10 +303,9 @@ class _ContentState extends State<Content> with SingleTickerProviderStateMixin {
                           : files(),
                   isloading3
                       ? Circular()
-                      : _files.isEmpty
+                      : _quizzes.isEmpty
                           ? Center(child: Text('There are no data'.tr))
-                          : isStart == false
-                              ? Column(
+                          :  Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Row(
@@ -344,17 +355,83 @@ class _ContentState extends State<Content> with SingleTickerProviderStateMixin {
                                                     ))
                                                 }
                                               : {
-                                                  _start_quizzes
-                                                      .start(
-                                                          widget.courses.id
-                                                              .toString(),
-                                                          context)
-                                                      .whenComplete(() {
-                                                    setState(() {
-                                                      isStart =
-                                                          _start_quizzes.status;
-                                                    });
-                                                  })
+                                                showDialog(context: context, builder: (context2) {
+                                                  return AlertDialog(
+                                                    shape: RoundedRectangleBorder(
+                                                              side: BorderSide(color: Colors.blue),
+                                                              borderRadius: BorderRadius.circular(50.0),
+                                                            ),
+                                                    content: Opacity(
+                                                      opacity: 0.6,
+                                                      child: Container(
+                                                        
+                                                        height: 120,
+                                                        child: Row(
+                                                          children: [
+                                                            Icon(Icons.info,size: 70,color: Color(Colorbutton),),
+                                                            SizedBox(width: 2,),
+                                                            Column(
+                                                              children: [
+                                                                Text("لا تستطيع التقدم \nلهذا الاختبار الا مرة واحدة",textAlign: TextAlign.center,style: TextStyle(color: Colors.black),),
+                                                                SizedBox(height: 5,),
+                                                                Row(
+                                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                  children: [
+                                                                    Container(
+                                                                      width: 78,
+                                                                      child: MaterialButton(
+                                                                        color: Colors.green,
+                                                                        child: Text("ok"),
+                                                                        onPressed: () {
+                                                                          Navigator.of(context2).pop();
+                                                                          _start_quizzes
+                                                                            .start(
+                                                                                _quizzes[0].id
+                                                                                    .toString(),
+                                                                                context)
+                                                                            .whenComplete(() {
+                                                                              
+                                                                          setState(() {
+                                                                            
+                                                                            isStart =
+                                                                                _start_quizzes.status;
+                                                                                if (isStart) {
+                                                                                  Navigator.pushAndRemoveUntil(context,
+                                                                                      MaterialPageRoute(builder: (context) {
+                                                                                    return TestScreen(quizzes:  _quizzes,);
+                                                                                  }), (route) => false);
+                                                                                  
+                                                                                }
+                                                                          });
+                                                                        });
+                                                                      },),
+                                                                    ),
+
+                                                                    SizedBox(width: 4,),
+                                                    
+                                                    
+                                                                    Container(
+                                                                      width: 78,
+                                                                      child: MaterialButton(
+                                                                        color: Colors.red,
+                                                                        child: Text("cancel"),
+                                                                        onPressed: () {
+                                                                           Navigator.of(context).pop();
+                                                                      },),
+                                                                    )
+                                                    
+                                                    
+                                                                  ],
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  );
+                                                },)
+                                                
                                                 };
                                         },
                                         child: Text(
@@ -373,295 +450,7 @@ class _ContentState extends State<Content> with SingleTickerProviderStateMixin {
                                             primary: Colors.green)),
                                   ],
                                 )
-                              : SingleChildScrollView(
-                                  child: Column(
-                                    children: [
-                                      Countdown(
-                                        seconds: int.parse(_quizzes[0]
-                                                .duration
-                                                .toString()) *
-                                            60,
-                                        build: (BuildContext context,
-                                            double time) {
-                                          return Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                'test duration :  '.tr,
-                                                style: TextStyle(fontSize: 20),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                              Text(
-                                                time
-                                                    .toStringAsFixed(0)
-                                                    .toString(),
-                                                style: TextStyle(
-                                                    fontSize: 20,
-                                                    color: Colors.green,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                              Text(
-                                                '  seconds'.tr,
-                                                style: TextStyle(fontSize: 20),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                        interval: Duration(milliseconds: 100),
-                                        onFinished: () {
-                                          _finish_quizzes.quiz(
-                                              _quizzes[0].id.toString(),
-                                              answer);
-
-                                          ScaffoldMessenger.of(context)
-                                            ..hideCurrentSnackBar()
-                                            ..showSnackBar(SnackBar(
-                                              elevation: 0,
-                                              behavior:
-                                                  SnackBarBehavior.floating,
-                                              backgroundColor:
-                                                  Colors.transparent,
-                                              content: AwesomeSnackbarContent(
-                                                title: 'time is over'.tr,
-                                                message:
-                                                    'Time has expired. Please try again later'
-                                                        .tr,
-                                                contentType:
-                                                    ContentType.success,
-                                              ),
-                                            ));
-                                        },
-                                      ),
-                                      Text((numPage + 1).toString() +
-                                          '/' +
-                                          _quizzes[0]
-                                              .questions!
-                                              .length
-                                              .toString()),
-                                      Container(
-                                          padding: EdgeInsets.all(8),
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height /
-                                              2.5,
-                                          child: PageView.builder(
-                                            onPageChanged: (value) {
-                                              setState(() {
-                                                numPage = value;
-                                              });
-                                            },
-                                            controller: _pageController,
-                                            itemCount:
-                                                _quizzes[0].questions!.length,
-                                            itemBuilder: (context, index) {
-                                              return Container(
-                                                child: Column(
-                                                  children: [
-                                                    Row(
-                                                      children: [
-                                                        Text(
-                                                          _quizzes[0]
-                                                                  .questions![
-                                                                      index]
-                                                                  .question
-                                                                  .toString() +
-                                                              ' :',
-                                                          style: TextStyle(
-                                                              fontSize: 20),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    Padding(
-                                                        padding: EdgeInsets
-                                                            .symmetric(
-                                                                horizontal: 5),
-                                                        child: RadioListTile<
-                                                            dynamic>(
-                                                          activeColor: Color(
-                                                              Colorbutton),
-                                                          title: Text(
-                                                            _quizzes[0]
-                                                                .questions![
-                                                                    index]
-                                                                .a
-                                                                .toString(),
-                                                            style: TextStyle(
-                                                                fontSize: 18),
-                                                          ),
-                                                          groupValue: ans,
-                                                          onChanged: (value) {
-                                                            setState(() {
-                                                              ans = value;
-                                                            });
-                                                            answer.add('a');
-                                                            _pageController.animateToPage(
-                                                                _pageController
-                                                                        .page!
-                                                                        .toInt() +
-                                                                    1,
-                                                                duration: Duration(
-                                                                    milliseconds:
-                                                                        400),
-                                                                curve: Curves
-                                                                    .easeIn);
-                                                          },
-                                                          value: _quizzes[0]
-                                                              .questions![index]
-                                                              .a
-                                                              .toString(),
-                                                        )),
-                                                    Padding(
-                                                        padding: EdgeInsets
-                                                            .symmetric(
-                                                                horizontal: 5),
-                                                        child: RadioListTile<
-                                                            dynamic>(
-                                                          activeColor: Color(
-                                                              Colorbutton),
-                                                          title: Text(
-                                                            _quizzes[0]
-                                                                .questions![
-                                                                    index]
-                                                                .b
-                                                                .toString(),
-                                                            style: TextStyle(
-                                                                fontSize: 18),
-                                                          ),
-                                                          groupValue: ans,
-                                                          onChanged: (value) {
-                                                            setState(() {
-                                                              ans = value;
-                                                            });
-                                                            answer.add('b');
-                                                            _pageController.animateToPage(
-                                                                _pageController
-                                                                        .page!
-                                                                        .toInt() +
-                                                                    1,
-                                                                duration: Duration(
-                                                                    milliseconds:
-                                                                        400),
-                                                                curve: Curves
-                                                                    .easeIn);
-                                                          },
-                                                          value: _quizzes[0]
-                                                              .questions![index]
-                                                              .b
-                                                              .toString(),
-                                                        )),
-                                                    Padding(
-                                                        padding: EdgeInsets
-                                                            .symmetric(
-                                                                horizontal: 5),
-                                                        child: RadioListTile<
-                                                            dynamic>(
-                                                          activeColor: Color(
-                                                              Colorbutton),
-                                                          title: Text(
-                                                            _quizzes[0]
-                                                                .questions![
-                                                                    index]
-                                                                .c
-                                                                .toString(),
-                                                            style: TextStyle(
-                                                                fontSize: 18),
-                                                          ),
-                                                          groupValue: ans,
-                                                          onChanged: (value) {
-                                                            setState(() {
-                                                              ans = value;
-                                                            });
-                                                            answer.add('c');
-                                                            _pageController.animateToPage(
-                                                                _pageController
-                                                                        .page!
-                                                                        .toInt() +
-                                                                    1,
-                                                                duration: Duration(
-                                                                    milliseconds:
-                                                                        400),
-                                                                curve: Curves
-                                                                    .easeIn);
-                                                          },
-                                                          value: _quizzes[0]
-                                                              .questions![index]
-                                                              .c
-                                                              .toString(),
-                                                        )),
-                                                    Padding(
-                                                        padding: EdgeInsets
-                                                            .symmetric(
-                                                                horizontal: 5),
-                                                        child: RadioListTile<
-                                                            dynamic>(
-                                                          activeColor: Color(
-                                                              Colorbutton),
-                                                          title: Text(
-                                                            _quizzes[0]
-                                                                .questions![
-                                                                    index]
-                                                                .d
-                                                                .toString(),
-                                                            style: TextStyle(
-                                                                fontSize: 18),
-                                                          ),
-                                                          groupValue: ans,
-                                                          onChanged: (value) {
-                                                            setState(() {
-                                                              ans = value;
-                                                            });
-                                                            answer.add('d');
-                                                            _pageController.animateToPage(
-                                                                _pageController
-                                                                        .page!
-                                                                        .toInt() +
-                                                                    1,
-                                                                duration: Duration(
-                                                                    milliseconds:
-                                                                        400),
-                                                                curve: Curves
-                                                                    .easeIn);
-                                                          },
-                                                          value: _quizzes[0]
-                                                              .questions![index]
-                                                              .d
-                                                              .toString(),
-                                                        )),
-                                                  ],
-                                                ),
-                                              );
-                                            },
-                                          )),
-                                      ElevatedButton(
-                                          onPressed: () {
-                                            _finish_quizzes.quiz(
-                                                _quizzes[0].id.toString(),
-                                                answer);
-                                          },
-                                          child: Text(
-                                            'Finish'.tr,
-                                            style: TextStyle(
-                                                fontSize: 17,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          style: ElevatedButton.styleFrom(
-                                              shape: RoundedRectangleBorder(
-                                                  // side: BorderSide(width: 1.0, color: Colors.black),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          15)),
-                                              minimumSize: const Size(100, 50),
-                                              primary: Colors.red)),
-                                    ],
-                                  ),
-                                )
+                              
                 ],
                 controller: _tabController,
               ),
@@ -721,62 +510,61 @@ class _ContentState extends State<Content> with SingleTickerProviderStateMixin {
       elevation: 8,
       child: ListTile(
           onTap: () {
-            widget.show
-                ? {
-                    ScaffoldMessenger.of(context)
-                      ..hideCurrentSnackBar()
-                      ..showSnackBar(SnackBar(
-                        elevation: 0,
-                        behavior: SnackBarBehavior.floating,
-                        backgroundColor: Colors.transparent,
-                        content: AwesomeSnackbarContent(
-                          title: 'There is no subscription'.tr,
-                          message: 'Complaint sent successfully'.tr,
-                          contentType: ContentType.warning,
-                        ),
-                      ))
-                  }
-                : {
-                    setState(() {
-                      isloadingBook = '1';
-                    }),
-                    getbooks(file)
-                  };
+            // widget.show
+            //     ? {
+                //     ScaffoldMessenger.of(context)
+                //       ..hideCurrentSnackBar()
+                //       ..showSnackBar(SnackBar(
+                //         elevation: 0,
+                //         behavior: SnackBarBehavior.floating,
+                //         backgroundColor: Colors.transparent,
+                //         content: AwesomeSnackbarContent(
+                //           title: 'There is no subscription'.tr,
+                //           message: 'Complaint sent successfully'.tr,
+                //           contentType: ContentType.warning,
+                //         ),
+                //       ))
+                //   }
+                // : {
+                //     setState(() {
+                //       isloadingBook = '1';
+                //     }),
+                //     getbooks(file)
+                //   };
           },
           title: Text(
             file.file_name.toString(),
             overflow: TextOverflow.ellipsis,
             style: TextStyle(fontFamily: 'Cobe', fontWeight: FontWeight.bold),
           ),
-          subtitle: Text(
-            'Click to download the book'.tr,
-            style: TextStyle(
-              fontFamily: 'Cobe',
-              fontWeight: FontWeight.bold,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
+          trailing: Container(
+                          height: 50,
+                          width: 80,
+                          child: FileDownloader(downloadurl:file.file_url,name:file.file_name)),
+                      
           leading: Image.asset(
             logo,
             height: 75,
           ),
-          trailing: isloadingBook == '0'
-              ? SizedBox()
-              : isloadingBook == '1'
-                  ? _total.toString() == 'null'
-                      ? CircularProgressIndicator(
-                          color: Color(Colorbutton),
-                        )
-                      : Text(_total.toString())
-                  : Icon(
-                      Icons.done,
-                      color: Colors.green,
-                    )),
+          // trailing: isloadingBook == '0'
+          //     ? SizedBox()
+          //     : isloadingBook == '1'
+          //         ? _total.toString() == 'null'
+          //             ? CircularProgressIndicator(
+          //                 color: Color(Colorbutton),
+          //               )
+          //             : Text(_total.toString())
+          //         : Icon(
+          //             Icons.done,
+          //             color: Colors.green,
+          //           )
+                    ),
     );
   }
 
   Widget item_lessons(new_lessons_model lessons) {
     return Card(
+      color: lessons.free?Colors.white:Colors.purple[100],
       elevation: 8,
       child: ListTile(
         onTap: () {
@@ -784,8 +572,18 @@ class _ContentState extends State<Content> with SingleTickerProviderStateMixin {
           // print(lessons.free);
           lessons.free != true
               ? {
-                lessons.subscribed.toString()=="true"?
-                _launchUrl(lessons.drive_url):{
+                (lessons.subscribed.toString()=="true")?{
+                  (lessons.use_resource.toString()=="drive")?{
+                    _launchUrl(lessons.drive_url)
+                  }:{
+                     Navigator.push(context,
+                            MaterialPageRoute(builder: (BuildContext context) {
+                          return MyNewVideoPlayer(url: lessons.video_url,);
+                        }))
+                  }
+                
+                        
+                        }:{
                   ScaffoldMessenger.of(context)
                     ..hideCurrentSnackBar()
                     ..showSnackBar(SnackBar(
@@ -800,14 +598,23 @@ class _ContentState extends State<Content> with SingleTickerProviderStateMixin {
                     ))
                 }
                 }
-              :  _launchUrl(lessons.drive_url);
+              :  (lessons.use_resource.toString()=="drive")?{
+                    _launchUrl(lessons.drive_url)
+                  }:{
+                     Navigator.push(context,
+                            MaterialPageRoute(builder: (BuildContext context) {
+                          return MyNewVideoPlayer(url: lessons.video_url,);
+                        }))
+                  };
         },
         title: Row(
           children: [
-            Text(
-              lessons.title.toString(),
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontFamily: 'Cobe', fontWeight: FontWeight.bold,fontSize: 10),
+            Container(
+              width: 120,
+              child: Text(
+                lessons.title.toString(),
+                style: TextStyle(fontFamily: 'Cobe', fontWeight: FontWeight.bold,fontSize: 10),
+              ),
             ),
             SizedBox(
               width: 15,
@@ -815,9 +622,9 @@ class _ContentState extends State<Content> with SingleTickerProviderStateMixin {
             lessons.free
                 ? Text(
                     'Free',
-                    style: TextStyle(color: Colors.green),
+                    style: TextStyle(color: Colors.green,fontWeight: FontWeight.bold,fontSize: 19),
                   )
-                : Text('data')
+                : Icon(Icons.lock,color: Color(Colorbutton),)
           ],
         ),
         subtitle: Text(
@@ -840,9 +647,26 @@ class _ContentState extends State<Content> with SingleTickerProviderStateMixin {
   final Uri _url = Uri.parse(video_Drive_URl);
   if (!await launchUrl(
     _url,
-    mode: LaunchMode.inAppWebView
+    mode: LaunchMode.externalApplication,
+    webViewConfiguration: WebViewConfiguration(
+      enableJavaScript: true,
+      
+    )
     )) {
     throw Exception('Could not launch $_url');
   }
 }
+}
+filtercolor(String studentanswer,String correctanswer,String curruntans){
+  
+  if ((studentanswer==correctanswer) && (studentanswer==curruntans)) {
+    return Colors.green;
+  }else if((studentanswer!=correctanswer) && (studentanswer==curruntans)){
+    return Colors.red;
+  }else if((studentanswer!=correctanswer) && (correctanswer==curruntans)){
+     return Colors.green;
+  }
+  else{
+    return Colors.white;
+  }
 }

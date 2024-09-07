@@ -2,35 +2,40 @@ import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:setappstore/Utils/general_URL.dart';
-import 'package:setappstore/model/categories_model.dart';
-import 'package:setappstore/screen/subcategories/subcategories.dart';
+import 'package:setappstore/Utils/imageURL.dart';
 
-import '../../Utils/Color.dart';
-import '../../Utils/imageURL.dart';
-import '../../controls/get_control.dart';
+import '../Utils/Color.dart';
+import '../controls/get_control.dart';
+import '../model/categories_model.dart';
+import '../model/subcategories.dart';
+import 'courses.dart';
 
-class Courses extends StatefulWidget {
-  const Courses({Key? key}) : super(key: key);
+class subcategories extends StatefulWidget {
+  categories_model Cat;
+  subcategories({Key? key, required this.Cat}) : super(key: key);
 
   @override
-  State<Courses> createState() => _CoursesState();
+  State<subcategories> createState() => _subcategoriesState();
 }
 
-class _CoursesState extends State<Courses> {
-  bool isloading = true;
-  get_Control _get_control = get_Control();
-  List<categories_model> _categories = [];
-
-  getCategories() {
-    _get_control.get_categories().then((value) => setState(() {
-          _categories = value!;
-          isloading = false;
-        }));
-  }
-
+class _subcategoriesState extends State<subcategories> {
   secure() async {
     await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
   }
+
+  get_Control _get_control = get_Control();
+  List<subcategories_model> _subcategories = [];
+
+  getCategories() {
+    _get_control
+        .get_subcategories(widget.Cat.id.toString())
+        .then((value) => setState(() {
+              _subcategories = value!;
+              isloading = false;
+            }));
+  }
+
+  bool isloading = true;
 
   @override
   void initState() {
@@ -42,17 +47,18 @@ class _CoursesState extends State<Courses> {
 
   @override
   Widget build(BuildContext context) {
-    double wi = MediaQuery.of(context).size.width;
     double hi = MediaQuery.of(context).size.height;
+    double wi = MediaQuery.of(context).size.width;
     return Scaffold(
       body: ColorfulSafeArea(
         color: Colors.black,
         child: Container(
-          color: Colors.red,
           child: SafeArea(
               child: Container(
+                padding: EdgeInsets.symmetric(horizontal:10),
             decoration: BoxDecoration(
               gradient: LinearGradient(
+                
                 begin: Alignment.centerRight,
                 end: Alignment.centerLeft,
                 colors: [
@@ -63,33 +69,52 @@ class _CoursesState extends State<Courses> {
             ),
             child: Column(
               children: [
-                // Container(
-                //   padding: EdgeInsets.only(top: 5),
-                //   child: Row(
-                //     children: [
-                //       IconButton(
-                //           onPressed: () {
-                //             Navigator.pop(context);
-                //           },
-                //           icon: Icon(Icons.arrow_back_ios))
-                //     ],
-                //   ),
-                // ),
+                SizedBox(
+              height: 50,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                children: [
+                  InkWell(
+                    child: Icon(
+                      Icons.arrow_back,
+                      color: Colors.white,
+                      size: 30,
+                    ),
+                    onTap: (() {
+                      Navigator.pop(context);
+                    }),
+                  ),
+                ],
+              ),
+            ),
+            
                 SizedBox(
                   height: hi / 6,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      IconButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          icon: Icon(
-                            Icons.arrow_back,
+                      // IconButton(
+                      //     onPressed: () {
+                      //       Navigator.of(context).pop();
+                      //     },
+                      //     icon: Icon(
+                      //       Icons.arrow_back,
+                      //       color: Colors.white,
+                      //       size: 30,
+                      //     )),
+                      Text(
+                        widget.Cat.name.toString(),
+                        style: TextStyle(
                             color: Colors.white,
-                            size: 30,
-                          )),
-                      Image.asset(logo),
+                            fontSize: 18,
+                            fontFamily: 'Cobe',
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        width: 50,
+                      ),
                     ],
                   ),
                 ),
@@ -108,12 +133,13 @@ class _CoursesState extends State<Courses> {
                             color: Color(Colorbutton),
                           ))
                         : GridView.builder(
-                            itemCount: _categories.length,
+                            itemCount: _subcategories.length,
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
                                     childAspectRatio: (1.2), crossAxisCount: 2),
                             itemBuilder: (BuildContext context, int index) {
-                              return items(_categories[index]);
+                              return 
+                              items(_subcategories[index]);
                             },
                           ),
                   ),
@@ -126,12 +152,12 @@ class _CoursesState extends State<Courses> {
     );
   }
 
-  Widget items(categories_model categorie) {
+  Widget items(subcategories_model subCat) {
     return InkWell(
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return subcategories(
-            Cat: categorie,
+          return chapters(
+            sub: subCat,
           );
         }));
       },
@@ -141,11 +167,11 @@ class _CoursesState extends State<Courses> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Image.network(
-              categorie.image.toString(),
+              subCat.image.toString(),
               height: 100,
             ),
             Text(
-              categorie.name.toString(),
+              subCat.name.toString(),
               overflow: TextOverflow.ellipsis,
               style: TextStyle(fontFamily: 'Cobe', fontWeight: FontWeight.bold),
             )

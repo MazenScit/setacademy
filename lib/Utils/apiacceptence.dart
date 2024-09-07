@@ -11,7 +11,6 @@ class ApiAcceptence {
     if (response.statusCode == 200) {
       print(response.body);
       try {
-        
         return response.body;
       } catch (error) {
         print(error);

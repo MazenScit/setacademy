@@ -81,6 +81,7 @@ class get_Control {
   Future<List<techers_model>?> get_techers(String id) async {
     String myUrl = "$serverUrl/courses/${id}/teachers";
     http.Response response = await http.get(Uri.parse(myUrl));
+    print("nn "+myUrl);
     print(response.body);
     if (response.statusCode == 200) {
       print(response.body);
@@ -198,10 +199,16 @@ class get_Control {
     final prefs = await SharedPreferences.getInstance();
     final key = 'api_token';
     final long = prefs.get('long');
+    final key2 = 'api_token';
+    final user_id = prefs.get(key2);
+
     print(id);
     String myUrl = "$serverUrl/courses?subcategory_id=${id}";
     http.Response response =
-        await http.get(Uri.parse(myUrl), headers: {'lang': long.toString()});
+        await http.get(Uri.parse(myUrl), headers: {
+          "authorization": "Bearer $user_id",
+          "Accept": "application/json",
+          'lang': long.toString()});
 
     print(response.body);
     if (response.statusCode == 200) {
@@ -353,6 +360,7 @@ class get_Control {
     final key = 'api_token';
     final long = prefs.get('long');
     String myUrl = "$serverUrl/governorates";
+    print(myUrl);
     http.Response response =
         await http.get(Uri.parse(myUrl), headers: {'lang': long.toString()});
     print(response.statusCode);
